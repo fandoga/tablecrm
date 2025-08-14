@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./components/Login";
+import OrderForm from "./pages/OrderForm";
+import { GlobalStyles } from "./styles/common";
 
-function App() {
+const App: React.FC = () => {
+  const [token, setToken] = useState<string | null>(null);
+
+  if (!token) {
+    return (
+      <>
+        <GlobalStyles />
+        <Login onLogin={(t) => setToken(t)} />
+      </>
+    )
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <>
+      <GlobalStyles />
+      <OrderForm token={token} />
+    </>
+  )
+};
 
 export default App;
