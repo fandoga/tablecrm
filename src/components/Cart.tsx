@@ -1,4 +1,5 @@
-import React from "react";
+import { Flex } from "antd";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 interface Product {
@@ -14,53 +15,61 @@ interface CartProps {
   onRemove: (id: number | string) => void;
 }
 
-export const Cart: React.FC<CartProps> = ({
-  selectedProducts,
-  onQuantityChange,
-  onRemove,
-}) => {
-  const total = selectedProducts.reduce(
-    (sum, p) => sum + p.price * p.quantity,
-    0
-  );
+export const Cart = forwardRef<HTMLDivElement, CartProps>(
+  ({ selectedProducts, onQuantityChange, onRemove }, ref) => {
+    const total = selectedProducts.reduce(
+      (sum, p) => sum + p.price * p.quantity,
+      0
+    );
 
-  return (
-    <CartWrapper>
-      <CartLabel>Корзина</CartLabel>
-      {selectedProducts.length === 0 ? (
-        <EmptyCart>Корзина пуста</EmptyCart>
-      ) : (
-        selectedProducts.map((product) => (
-          <CartItem key={product.id}>
-            <ProductInfo>
-              {product.name} — {product.price} ₽ × {product.quantity} ={" "}
-              {product.price * product.quantity} ₽
-            </ProductInfo>
-            <QuantityInput
-              type="number"
-              min={1}
-              value={product.quantity}
-              onChange={(e) =>
-                onQuantityChange(product.id, Number(e.target.value))
-              }
-            />
-            <RemoveButton onClick={() => onRemove(product.id)}>
-              Удалить
-            </RemoveButton>
-          </CartItem>
-        ))
-      )}
-      <Total>Итого: {total} ₽</Total>
-    </CartWrapper>
-  );
-};
+    return (
+      <CartWrapper ref={ref}>
+        <CartLabel>Корзина</CartLabel>
+        {selectedProducts.length === 0 ? (
+          <EmptyCart>Корзина пуста</EmptyCart>
+        ) : (
+          selectedProducts.map((product) => (
+            <CartItem key={product.id}>
+              <ProductInfo>
+                {product.name} — {product.price} ₽
+              </ProductInfo>
+              <QuantityInput
+                type="number"
+                min={1}
+                value={product.quantity}
+                onChange={(e) =>
+                  onQuantityChange(product.id, Number(e.target.value))
+                }
+              />
+              <RemoveButton onClick={() => onRemove(product.id)}>
+                Удалить
+              </RemoveButton>
+            </CartItem>
+          ))
+        )}
+        <Flex
+          style={{
+            paddingTop: "20px",
+            marginTop: "20px",
+            borderTop: "1px solid rgb(10, 10, 10)",
+          }}
+          justify="space-between"
+          align="center"
+        >
+          <span style={{ fontWeight: "bold", textAlign: "left" }}>Итого:</span>
+          <span style={{ fontWeight: "bold", textAlign: "right" }}>{total} ₽</span>
+        </Flex>
+      </CartWrapper>
+    );
+  }
+);
+
 
 
 const CartWrapper = styled.div`
   border-top: 1px solid #ddd;
   margin-top: 1rem;
   padding-top: 1rem;
-  max-width: 64rem;
   display: flex;
   flex-direction: column;
   gap: 0rem;
@@ -116,7 +125,3 @@ const RemoveButton = styled.button`
   }
 `;
 
-const Total = styled.div`
-  font-weight: bold;
-  text-align: right;
-`;

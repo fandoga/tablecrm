@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, } from "antd";
+import { Button, Flex, } from "antd";
 
 interface Props {
     loading: boolean
@@ -9,11 +9,6 @@ interface Props {
     onCreateAndConduct: () => void
 }
 
-const Actions = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-`;
 
 const ActionButtons: React.FC<Props> = ({
     onCreate,
@@ -23,10 +18,28 @@ const ActionButtons: React.FC<Props> = ({
 }) => {
 
     return (
-        <Actions>
-            <Button loading={loading} type="primary" disabled={disabled} onClick={onCreate}>Создать продажу</Button>
-            <Button loading={loading} type="primary" disabled={disabled} onClick={onCreateAndConduct}>Создать и провести</Button>
-        </Actions>
+        <Flex style={{ borderTop: "1px solid rgb(221, 221, 221)", background: "#ffffff", padding: "16px", position: "sticky", bottom: "0" }} gap="12px" justify="center" align="center" vertical>
+            <Button
+                size="large"
+                style={{ width: "100%" }}
+                loading={loading}
+                type="primary"
+                disabled={disabled}
+                onClick={onCreate}>
+                Создать продажу
+            </Button>
+            <Button
+                color="purple"
+                variant="solid"
+                size="large"
+                style={{ width: "100%" }}
+                loading={loading}
+                type="primary"
+                disabled={disabled}
+                onClick={onCreateAndConduct}>
+                Создать и провести
+            </Button>
+        </Flex >
     )
 };
 

@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Label, Select } from "../styles/common";
+import { BankOutlined } from "@ant-design/icons";
+import { Flex } from "antd";
 
 interface Props {
     token: string;
     onSelectOrganization: (id: string) => void;
 }
-const Label = styled.p`
-    margin-bottom: 6px;
-`;
-
-const Select = styled.select`
-  margin-bottom: 12px;
-  padding: 8px;
-  width: 100%;
-  border-radius: 6px;
-`;
 
 const SelectOrganizations: React.FC<Props> = ({ token, onSelectOrganization }) => {
     const [orgs, setOrgs] = useState<any[]>([]);
@@ -33,7 +26,11 @@ const SelectOrganizations: React.FC<Props> = ({ token, onSelectOrganization }) =
 
     return (
         <div>
-            <Label>Организация</Label>
+            <Flex style={{ marginBottom: "10px" }} align="center" gap="8px">
+                <BankOutlined />
+                <Label>Организация*</Label>
+            </Flex>
+
             <Select onChange={(e) => onSelectOrganization(e.target.value)} disabled={loading}>
                 <option disabled selected value="">{loading ? "Загрузка..." : "Выберите организацию"}</option>
                 {orgs.map((org) => (

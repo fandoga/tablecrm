@@ -13,11 +13,30 @@ export const FieldWrapper = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Label = styled.label`
-  display: block;
-  font-size: 14px;
-  margin-bottom: 4px;
+export const Label = styled.p`
+font-weight: 500;
+color:rgb(36, 36, 36);
+font-size: 15px;
+// margin-bottom: 10px;
 `;
+
+export const LabelMin = styled.h3`
+  font-weight: 500;
+  font-size: 17px;
+  padding-bottom: 16px;
+`;
+
+export const Select = styled.select`
+border: 1px solid rgb(215, 215, 215);
+margin-bottom: 16px;
+padding: 8px;
+height: 42px;
+width: 100%;
+border-radius: 6px;
+
+font-size: 15px;
+`;
+
 
 export const Input = styled.input`
   width: 100%;

@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Dropdown, Button } from "antd";
+import { Dropdown, Button, Flex } from "antd";
+import {
+    CreditCardOutlined
+} from '@ant-design/icons';
+import { Label, Select } from "../styles/common";
 
 interface Props {
     token: string;
     onSelectAccount: (id: string) => void;
 }
-
-const Label = styled.p`
-margin-bottom: 6px;
-`;
-
-const Select = styled.select`
-  margin-bottom: 12px;
-  padding: 8px;
-  width: 100%;
-  border-radius: 6px;
-`;
-
 
 const SelectAccounts: React.FC<Props> = ({ token, onSelectAccount }) => {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -39,7 +31,10 @@ const SelectAccounts: React.FC<Props> = ({ token, onSelectAccount }) => {
 
     return (
         <div>
-            <Label>Счёт</Label>
+            <Flex style={{ marginBottom: "10px" }} align="center" gap="8px">
+                <CreditCardOutlined />
+                <Label>Счёт*</Label>
+            </Flex>
             <Select onChange={(e) => onSelectAccount(e.target.value)} disabled={loading}
             >
                 <option disabled selected value="">{loading ? "Загрузка..." : "Выберите счёт"}</option>

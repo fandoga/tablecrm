@@ -7,16 +7,21 @@ interface LoginProps {
 }
 
 const Container = styled.div`
+  box-shadow: 0px 16px 21px 3px rgba(34, 60, 80, 0.21);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   max-width: 400px;
   margin: 100px auto;
-  padding: 20px;
+  padding: 30px;
   border: 1px solid #ddd;
   border-radius: 8px;
 `;
 
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState("af1874616430e04cfd4bce30035789907e899fc7c3a1a4bb27254828ff304a77");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -48,15 +53,17 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <Container>
-      <h2>Вход</h2>
+      <h2>TableCRM</h2>
+      <p style={{ fontWeight: "300", paddingTop: "14px" }}>Мобильная касса</p>
       <Divider size="small"></Divider>
       <Input
+        size="large"
         value={token}
         onChange={(e) => setToken(e.target.value)}
         placeholder="Введите токен"
       />
       <Divider size="small"></Divider>
-      <Button loading={loading} type="primary" onClick={handleSubmit}>
+      <Button size="large" style={{ width: "100%" }} loading={loading} type="primary" onClick={handleSubmit}>
         {loading ? "Проверка..." : "Войти"}
       </Button>
     </Container>

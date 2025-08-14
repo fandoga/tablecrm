@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Cart } from "./Cart";
-import { Button } from "antd";
+import { Button, Flex } from "antd";
+import { DropboxOutlined } from "@ant-design/icons";
+import { LabelMin, Select } from "../styles/common";
 
 interface Props {
     token: string;
@@ -11,7 +13,7 @@ interface Props {
 
 interface Product {
     id: number | string;
-    nomenclature_id: number; // добавили
+    nomenclature_id: number;
     name: string;
     price: number;
     quantity: number;
@@ -24,20 +26,14 @@ interface SelectedProduct {
 }
 
 const Wrapper = styled.div`
-  margin-bottom: 16px;
-`;
-const Label = styled.p`
-margin-bottom: 6px;
+  border-top: 1px solid rgb(221, 221, 221);
+  margin-bottom: 20px;
+  padding-top: 20px;
 `;
 
-const Select = styled.select`
-  margin-bottom: 12px;
-  padding: 8px;
-  width: 100%;
-  border-radius: 6px;
-`;
 
 const SelectProducts: React.FC<Props> = ({ token, onSelectProducts }) => {
+    const bottomRef = useRef<HTMLDivElement | null>(null);
     const [products, setProducts] = useState<any[]>([]);
     const [selectedId, setSelectedId] = useState<string>("");
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
@@ -90,7 +86,10 @@ const SelectProducts: React.FC<Props> = ({ token, onSelectProducts }) => {
 
     return (
         <Wrapper>
-            <Label>Товары</Label>
+            <Flex align="center" gap="8px">
+                <DropboxOutlined style={{ paddingBottom: "16px" }} />
+                <LabelMin>Товары</LabelMin>
+            </Flex>
             <Select onChange={(e) => setSelectedId(e.target.value)} value={selectedId} disabled={loading}>
                 <option disabled selected value="">{loading ? "Загрузка..." : "Выберите товар"}</option>
                 {products.map((prod) => (
@@ -105,6 +104,9 @@ const SelectProducts: React.FC<Props> = ({ token, onSelectProducts }) => {
                         (prod) => prod.id === Number(selectedId)
                     );
                     if (selectedProduct) {
+                        setTimeout(() => {
+                            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+                        }, 0);
                         addProduct({
                             id: selectedProduct.id,
                             nomenclature_id: selectedProduct.nomenclature_id,
@@ -117,12 +119,14 @@ const SelectProducts: React.FC<Props> = ({ token, onSelectProducts }) => {
                 Добавить
             </Button>
 
-
-            <Cart
-                selectedProducts={selectedProducts}
-                onQuantityChange={changeQuantity}
-                onRemove={removeProduct}
-            />
+            {selectedProducts.length > 0 && (
+                <Cart
+                    ref={bottomRef}
+                    selectedProducts={selectedProducts}
+                    onQuantityChange={changeQuantity}
+                    onRemove={removeProduct}
+                />
+            )}
         </Wrapper>
     );
 };

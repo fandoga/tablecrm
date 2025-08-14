@@ -1,7 +1,8 @@
 // src/components/OrderForm.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Button, } from "antd";
+import { LabelMin } from "../styles/common";
 
 import ClientSearch from "../components/ClientSearch";
 import SelectAccounts from "../components/SelectAccounts";
@@ -10,7 +11,6 @@ import SelectWarehouses from "../components/SelectWarehouses";
 import SelectPriceTypes from "../components/SelectPriceTypes";
 import SelectProducts from "../components/SelectProducts";
 import ActionButtons from "../components/ActionButtons";
-import { Color } from "antd/es/color-picker";
 
 interface OrderFormProps {
   token: string;
@@ -18,30 +18,48 @@ interface OrderFormProps {
 
 const FormContainer = styled.div`
   position: relative;
-  margin: 80px auto;
   justify-content: center;
-  padding: 16px;
-  max-width: 440px;
+  width: 100vw;
+`;
+
+const Header = styled.div`
+  background: #ffffff;
+  z-index: 5;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  top: 0;
+  position: sticky;
+  padding: 15px;
+`;
+
+const Main = styled.div`
+  padding: 32px
 `;
 
 const Label = styled.h1`
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 26px
+  font-weight: 600;
+  font-size: 20px;
+  text-align: left;
 `;
 
-const Popup = styled.div`
-  width: 448px;
-  position: absolute;
-  margin-left: -20px;
-  top: 20%;
-  border-radius: 12px;
-  background-color:rgb(226, 226, 226);
-  padding: 40px;
 
-  & h3 {
-  color:rgb(50, 50, 50);
-  }
+const Popup = styled.div`
+  position: fixed;
+top: 30%;
+left: 50%;
+transform: translateX(-50%);
+width: calc(100% - 40px); 
+max-width: 340px;
+margin: 0;
+padding: 40px;
+border-radius: 12px;
+background-color: rgb(226, 226, 226);
+box-shadow: 0px 16px 21px 3px rgba(34, 60, 80, 0.21);
+text-align: center;
+
+& h3 {
+  color: rgb(50, 50, 50);
+}
+
 `;
 
 const OrderForm: React.FC<OrderFormProps> = ({ token }) => {
@@ -57,7 +75,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ token }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (accountId && organizationId && warehouseId && priceTypeId && products.length) {
+    if (accountId && organizationId && warehouseId && products.length) {
       setFilled(true)
     } else {
       setFilled(false)
@@ -65,7 +83,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ token }) => {
     }
 
   },
-    [accountId, organizationId, warehouseId, priceTypeId, products])
+    [accountId, organizationId, warehouseId, products])
 
 
   const createOrder = async (conduct: boolean) => {
@@ -105,12 +123,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ token }) => {
         setLoading(false)
         setError("")
         Created(true)
-        setClientId(null)
-        setAccountId(null)
-        setOrganizationId(null)
-        setWarehouseId(null)
-        setPriceTypeId(null)
-        setProducts([])
       } else {
         setLoading(false)
         setError("Ошибка при создании заказа")
@@ -125,39 +137,46 @@ const OrderForm: React.FC<OrderFormProps> = ({ token }) => {
     <>
       <FormContainer >
         <div style={{ filter: isCreated ? "blur(2px)" : "blur(0px)" }} className="blur">
-          <Label>Оформление заказа</Label>
+          <Header>
+            <Label>Оформление заказа</Label>
+          </Header>
+          <Main>
+            <ClientSearch
+              token={token}
+              onSelectClient={setClientId}
+            />
+            <br></br>
+            <LabelMin>Параметры заказа</LabelMin>
+            <SelectAccounts
+              token={token}
+              onSelectAccount={setAccountId}
+            />
+            <SelectOrganizations
+              token={token}
+              onSelectOrganization={setOrganizationId}
+            />
+            <SelectWarehouses
+              token={token}
+              onSelectWarehouse={setWarehouseId}
+            />
+            <SelectPriceTypes
+              token={token}
+              onSelectPriceType={setPriceTypeId}
+            />
+            <SelectProducts token={token} onSelectProducts={setProducts} />
+          </Main>
 
-          <ClientSearch
-            token={token}
-            onSelectClient={setClientId}
-          />
-          <br></br>
-          <SelectAccounts
-            token={token}
-            onSelectAccount={setAccountId}
-          />
-          <SelectOrganizations
-            token={token}
-            onSelectOrganization={setOrganizationId}
-          />
-          <SelectWarehouses
-            token={token}
-            onSelectWarehouse={setWarehouseId}
-          />
-          <SelectPriceTypes
-            token={token}
-            onSelectPriceType={setPriceTypeId}
-          />
-          <SelectProducts token={token} onSelectProducts={setProducts} />
           <ActionButtons
             loading={loading}
             disabled={!isFilled}
             onCreate={() => createOrder(false)}
-            onCreateAndConduct={() => console.log(products)}
+            onCreateAndConduct={() => createOrder(true)}
           />
-          <br></br>
           {error !== "" && (
-            <span style={{ color: "red", marginLeft: "25%" }}>{error}</span>
+            <>
+              <br></br>
+              <span style={{ color: "red", marginLeft: "25%" }}>{error}</span>
+            </>
           )}
         </div>
         {isCreated && (

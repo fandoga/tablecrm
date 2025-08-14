@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Label, Select } from "../styles/common";
+import { ShopOutlined } from "@ant-design/icons";
+import { Flex } from "antd";
 
 interface Props {
     token: string;
     onSelectWarehouse: (id: string) => void;
 }
-const Label = styled.p`
-margin-bottom: 6px;
-`;
-
-const Select = styled.select`
-  margin-bottom: 12px;
-  padding: 8px;
-  width: 100%;
-  border-radius: 6px;
-`;
 
 const SelectWarehouses: React.FC<Props> = ({ token, onSelectWarehouse }) => {
     const [warehouses, setWarehouses] = useState<any[]>([]);
@@ -36,7 +29,11 @@ const SelectWarehouses: React.FC<Props> = ({ token, onSelectWarehouse }) => {
 
     return (
         <div>
-            <Label>Склад</Label>
+            <Flex style={{ marginBottom: "10px" }} align="center" gap="8px">
+                <ShopOutlined />
+                <Label>Склад*</Label>
+            </Flex>
+
             <Select onChange={(e) => onSelectWarehouse(e.target.value)} disabled={loading}>
                 <option disabled selected value="">{loading ? "Загрузка..." : "Выберите склад"}</option>
                 {warehouses.map((wh) => (

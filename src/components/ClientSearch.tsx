@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, Input, Flex } from "antd";
+import { PhoneOutlined, SearchOutlined } from '@ant-design/icons';
 import SelectClient from "./SelectClient";
-import { loadavg } from "os";
 
 interface ClientSearchProps {
     token: string;
@@ -10,11 +10,10 @@ interface ClientSearchProps {
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
   margin-bottom: 16px;
+`;
+
+const Label = styled.label`
 `;
 
 const Span = styled.span`
@@ -53,17 +52,21 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ token, onSelectClient }) =>
     };
 
     return (
-        <Flex vertical justify="center" align="center">
+        <Flex style={{ borderBottom: "1px solid rgb(221, 221, 221)" }} vertical>
             <Wrapper>
-                <label>Телефон клиента</label>
-                <Flex gap="small">
+                <Flex gap="8px">
+                    <PhoneOutlined />
+                    <Label>Поиск клиента</Label>
+                </Flex>
+                <Flex style={{ marginTop: "10px" }} gap="small">
                     <Input
+                        size="large"
                         type="text"
                         placeholder="+7-___-___-__-__"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
-                    <Button loading={loading} onClick={searchClient}>Найти</Button>
+                    <Button size="large" type="primary" icon={<SearchOutlined />} loading={loading} onClick={searchClient}></Button>
                 </Flex>
             </Wrapper>
             {error !== "" && (
