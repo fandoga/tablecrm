@@ -16,7 +16,7 @@ const SelectAccounts: React.FC<Props> = ({ token, onSelectAccount }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch(`https://app.tablecrm.com/api/v1/contragents/?token=${token}`)
+        fetch(`https://app.tablecrm.com/api/v1/payboxes/?token=${token}`)
             .then((res) => res.json())
             .then((data) => {
                 setAccounts(data.result);
@@ -37,7 +37,7 @@ const SelectAccounts: React.FC<Props> = ({ token, onSelectAccount }) => {
             </Flex>
             <Select onChange={(e) => onSelectAccount(e.target.value)} disabled={loading}
             >
-                <option disabled selected value="">{loading ? "Загрузка..." : "Выберите счёт"}</option>
+                <option disabled value="">{loading ? "Загрузка..." : "Выберите счёт"}</option>
                 {accounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
                         {acc.name}

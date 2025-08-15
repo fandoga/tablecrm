@@ -1,6 +1,8 @@
-import { Flex } from "antd";
-import React, { forwardRef } from "react";
+import { Button, Flex } from "antd";
+import React, { forwardRef, useState } from "react";
+import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { LabelMin } from "../styles/common";
 
 interface Product {
   id: number | string;
@@ -31,19 +33,37 @@ export const Cart = forwardRef<HTMLDivElement, CartProps>(
           selectedProducts.map((product) => (
             <CartItem key={product.id}>
               <ProductInfo>
-                {product.name} — {product.price} ₽
+                <span style={{ fontWeight: "500" }} >{product.name}</span> <br></br>
+                <span style={{ fontSize: "14px", fontWeight: "500", color: "rgb(71, 71, 71)" }}>{product.price} ₽ / шт.</span>
               </ProductInfo>
-              <QuantityInput
-                type="number"
-                min={1}
-                value={product.quantity}
-                onChange={(e) =>
-                  onQuantityChange(product.id, Number(e.target.value))
-                }
-              />
-              <RemoveButton onClick={() => onRemove(product.id)}>
-                Удалить
-              </RemoveButton>
+              <Flex gap="10px" align="center">
+                <Button
+                  onClick={() => onQuantityChange(product.id, product.quantity + 1)}
+                  type="primary"
+                  size="small"
+                  shape="circle"
+                  icon={<PlusOutlined />}
+                />
+
+                <LabelMin style={{ paddingBottom: "0" }}>{product.quantity}</LabelMin>
+
+                <Button
+                  onClick={() => {
+                    const newQuantity = product.quantity - 1;
+                    if (newQuantity < 1) {
+                      onRemove(product.id);
+                    } else {
+                      onQuantityChange(product.id, newQuantity);
+                    }
+                  }}
+                  variant="solid"
+                  color="danger"
+                  size="small"
+                  type="primary"
+                  shape="circle"
+                  icon={<MinusOutlined />}
+                />
+              </Flex>
             </CartItem>
           ))
         )}
